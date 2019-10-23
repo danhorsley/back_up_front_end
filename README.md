@@ -1,2 +1,5 @@
 # mud_front_end
-personal front end for mud
+
+super basic FE for MUD graphql requests
+
+use grid.py to run it
