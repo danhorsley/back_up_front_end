@@ -113,6 +113,7 @@ class MyGame(arcade.Window):
         row = int(y // (HEIGHT + MARGIN))
 
         print(f"Click coordinates: ({x}, {y}). Grid coordinates: ({row}, {column})")
+        print([c for c in arq0 if c['x'] == column and c['y'] == row][0]['description'])
 
         # Make sure we are on-grid. It is possible to click in the upper right
         # corner in the margin and go to a grid location that doesn't exist
