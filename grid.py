@@ -27,7 +27,8 @@ color_region = {'in a castle' : [arcade.color.ASH_GREY,arcade.color.AUROMETALSAU
                 'in an old abandoned mine' : [arcade.color.ANTIQUE_BRONZE,arcade.color.BISTRE_BROWN],
                 'in a dungeon' : [arcade.color.BOSTON_UNIVERSITY_RED,arcade.color.BURGUNDY],
                 'in a forest' : [arcade.color.BRITISH_RACING_GREEN,arcade.color.BUD_GREEN],
-                'in an endless cave' : [arcade.color.CADET_BLUE,arcade.color.BRIGHT_NAVY_BLUE]}
+                'in an endless cave' : [arcade.color.CADET_BLUE,arcade.color.BRIGHT_NAVY_BLUE],
+                'in a city' : [arcade.color.CHARCOAL,arcade.color.EERIE_BLACK]}
 
 
 
