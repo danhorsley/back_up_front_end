@@ -1,7 +1,7 @@
 import arcade
 from curl_examples import *
 
-floor_number = input('please input floor number')
+floor_number = input('please input floor number : ')
 floor_number = int(floor_number)
 arq = heroku_query(all_rooms_query)['data']['rooms']
 arq0 = [x for x in arq if x['floor'] == floor_number]
@@ -21,6 +21,13 @@ CORRIDOR_y = MARGIN * 2
 CORRIDOR_x = MARGIN
 x = y = 0
 bc = arcade.color.WHITE
+color_region = {'in a castle' : [arcade.color.ASH_GREY,arcade.color.AUROMETALSAURUS],
+                'on a mountain' : [arcade.color.AIR_SUPERIORITY_BLUE,arcade.color.AIR_FORCE_BLUE],
+                'in the sewers' : [arcade.color.APPLE_GREEN,arcade.color.AO],
+                'in an old abandoned mine' : [arcade.color.ANTIQUE_BRONZE,arcade.color.BISTRE_BROWN],
+                'in a dungeon' : [arcade.color.BOSTON_UNIVERSITY_RED,arcade.color.BURGUNDY],
+                'in a forest' : [arcade.color.BRITISH_RACING_GREEN,arcade.color.BUD_GREEN],
+                'in an endless cave' : [arcade.color.CADET_BLUE,arcade.color.BRIGHT_NAVY_BLUE]}
 
 
 
@@ -65,19 +72,24 @@ class MyGame(arcade.Window):
             for column in range(COLUMN_COUNT):
                 # Figure out what color to draw the box
                 if self.grid[row][column] == 1:
-                    color = arcade.color.GREEN
+                    color = 0 #arcade.color.GREEN
                 else:
-                    color = arcade.color.WHITE
+                    color = 1 #arcade.color.WHITE
 
                 # Do the math to figure out where the box is
                 x = (MARGIN + WIDTH) * column + MARGIN + WIDTH // 2
                 y = (MARGIN + HEIGHT) * row + MARGIN + HEIGHT // 2
 
-                # Draw the box
-                arcade.draw_rectangle_filled(x, y, WIDTH, HEIGHT, color)
+                
                 
                 #matching to grid
                 room_ref = [c for c in arq0 if c['x'] == column and c['y'] == row][0]
+
+                # Draw the box
+                my_color = color_region[room_ref['region']]
+                
+                arcade.draw_rectangle_filled(x, y, WIDTH, HEIGHT, my_color[color])
+
                 room_keys = ['nTo','sTo','eTo','wTo']
                 for k in room_keys:
                     if room_ref[k] is not None:
@@ -86,7 +98,7 @@ class MyGame(arcade.Window):
                                         'eTo' : [WIDTH/2, 0 ,CORRIDOR_y, CORRIDOR_x],
                                         'wTo' : [-WIDTH/2, 0 ,CORRIDOR_y, CORRIDOR_x]}
                         m = directions[k]
-                        arcade.draw_rectangle_filled(x +m[0], y +m[1] , m[2], m[3], bc)
+                        arcade.draw_rectangle_filled(x +m[0], y +m[1] , m[2], m[3], my_color[color])   
 
                 
 
