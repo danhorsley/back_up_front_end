@@ -2,6 +2,9 @@ import arcade
 from queries import *
 from buttons import *
 
+def text_pretty(some_text, n=50):
+    return ' \n '.join([some_text[i:i+n] for i in range(0, len(some_text), n)])
+
 
 temp_1 = my_query()
 #auth_key = login()
@@ -42,7 +45,7 @@ color_region = {'in a castle' : [arcade.color.ASH_GREY,arcade.color.AUROMETALSAU
 
 
 
-SCREEN_WIDTH = (WIDTH + MARGIN) * COLUMN_COUNT + MARGIN + 200
+SCREEN_WIDTH = (WIDTH + MARGIN) * COLUMN_COUNT + MARGIN + 400
 SCREEN_HEIGHT = (HEIGHT + MARGIN) * ROW_COUNT + MARGIN
 SCREEN_TITLE = "MUD Game"
 
@@ -69,7 +72,7 @@ class MyGame(arcade.Window):
         self.x = player_loc_x
         self.y = player_loc_y 
         self.floor = floor_number
-        self.desc = look_info['description']
+        self.desc = text_pretty(look_info['description'])
         self.itemdesc = look_info['items available']
         self.mq = my_query()
 
@@ -84,19 +87,20 @@ class MyGame(arcade.Window):
         
 
     def setup(self):
-        
+        adj = -15
+        x_adj = 350
         self.button_list = []
-        north_button = DirTextButton(SCREEN_WIDTH - 100, SCREEN_HEIGHT - 100, action_function = self.mq.move_n, text = "North")
+        north_button = DirTextButton(SCREEN_WIDTH - x_adj, SCREEN_HEIGHT - adj -50, action_function = self.mq.move_n, text = "North")
         self.button_list.append(north_button)
-        south_button = DirTextButton(SCREEN_WIDTH - 100, SCREEN_HEIGHT - 150,action_function = self.mq.move_s, text = "South")
+        south_button = DirTextButton(SCREEN_WIDTH - x_adj, SCREEN_HEIGHT - adj -2*50,action_function = self.mq.move_s, text = "South")
         self.button_list.append(south_button)
-        west_button = DirTextButton(SCREEN_WIDTH - 100, SCREEN_HEIGHT - 200,action_function = self.mq.move_w, text = "West")
+        west_button = DirTextButton(SCREEN_WIDTH - x_adj, SCREEN_HEIGHT - adj -3*50,action_function = self.mq.move_w, text = "West")
         self.button_list.append(west_button)
-        east_button = DirTextButton(SCREEN_WIDTH - 100, SCREEN_HEIGHT - 250,action_function = self.mq.move_e, text = "East")
+        east_button = DirTextButton(SCREEN_WIDTH - x_adj, SCREEN_HEIGHT - adj -4*50,action_function = self.mq.move_e, text = "East")
         self.button_list.append(east_button)
-        up_button = DirTextButton(SCREEN_WIDTH - 100, SCREEN_HEIGHT - 300,action_function = self.mq.move_u, text = "Up")
+        up_button = DirTextButton(SCREEN_WIDTH - x_adj, SCREEN_HEIGHT - adj -5*50,action_function = self.mq.move_u, text = "Up")
         self.button_list.append(up_button)
-        down_button = DirTextButton(SCREEN_WIDTH - 100, SCREEN_HEIGHT - 350,action_function = self.mq.move_d, text = "Down")
+        down_button = DirTextButton(SCREEN_WIDTH - x_adj, SCREEN_HEIGHT - adj -6*50,action_function = self.mq.move_d, text = "Down")
         self.button_list.append(down_button)
 
     def on_draw(self):
@@ -149,6 +153,10 @@ class MyGame(arcade.Window):
         for button in self.button_list:
             button.draw()
 
+        arcade.draw_text(
+            self.desc, SCREEN_WIDTH -240, SCREEN_HEIGHT -350, 
+            arcade.color.WHITE, 12, align="center", anchor_x="center", anchor_y="center")
+
     def on_mouse_press(self, x, y, button, key_modifiers):
         """
         Called when the user presses a mouse button.
@@ -164,6 +172,7 @@ class MyGame(arcade.Window):
         self.x = new_look['x']
         self.y = new_look['y']
         self.floor = new_look['floor']
+        self.desc = text_pretty(new_look['description'])
                 
 
     # def on_mouse_press(self, x, y, button, modifiers):
