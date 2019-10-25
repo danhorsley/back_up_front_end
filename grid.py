@@ -1,5 +1,5 @@
 import arcade
-from curl_examples import *
+from queries import *
 
 floor_number = input('please input floor number : ')
 floor_number = int(floor_number)
@@ -32,9 +32,9 @@ color_region = {'in a castle' : [arcade.color.ASH_GREY,arcade.color.AUROMETALSAU
 
 
 
-SCREEN_WIDTH = (WIDTH + MARGIN) * COLUMN_COUNT + MARGIN
+SCREEN_WIDTH = (WIDTH + MARGIN) * COLUMN_COUNT + MARGIN + 200
 SCREEN_HEIGHT = (HEIGHT + MARGIN) * ROW_COUNT + MARGIN
-SCREEN_TITLE = "Array Backed Grid Example"
+SCREEN_TITLE = "MUD Game"
 
 class MyGame(arcade.Window):
     """
@@ -85,6 +85,7 @@ class MyGame(arcade.Window):
                 
                 #matching to grid
                 room_ref = [c for c in arq0 if c['x'] == column and c['y'] == row][0]
+                
 
                 # Draw the box
                 my_color = color_region[room_ref['region']]
@@ -113,7 +114,25 @@ class MyGame(arcade.Window):
         row = int(y // (HEIGHT + MARGIN))
 
         print(f"Click coordinates: ({x}, {y}). Grid coordinates: ({row}, {column})")
-        print([c for c in arq0 if c['x'] == column and c['y'] == row][0]['description'])
+        room_ref = [c for c in arq0 if c['x'] == column and c['y'] == row][0]
+        print(room_ref)
+
+        room_description = room_ref['description']
+
+        n=50
+        room_description = ' /n '.join([room_description[i:i+n] for i in range(0, len(room_description), n)])
+
+        room_itemdesc = room_ref['itemdesc']
+
+        desc_text_loc_x = (WIDTH + MARGIN) * COLUMN_COUNT + MARGIN + 3
+        desc_text_loc_y = (HEIGHT + MARGIN) * ROW_COUNT + MARGIN - 50
+
+        arcade.draw_lrtb_rectangle_outline(desc_text_loc_x, desc_text_loc_x + 100,
+                                    desc_text_loc_y + 100, desc_text_loc_y,
+                                    arcade.color.WHITE, 1)
+        
+        arcade.draw_text(room_description, desc_text_loc_x, desc_text_loc_y, 
+                                        arcade.color.BLUE, 9, align="center")
 
         # Make sure we are on-grid. It is possible to click in the upper right
         # corner in the margin and go to a grid location that doesn't exist
