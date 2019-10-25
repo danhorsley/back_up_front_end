@@ -3,12 +3,13 @@ from queries import *
 from buttons import *
 
 
-auth_key = login()
-look_info = look()
+temp_1 = my_query()
+#auth_key = login()
+look_info = temp_1.look()
 floor_number = look_info['floor']
 #floor_number = input('please input floor number : ')
 #floor_number = int(floor_number)
-arq = heroku_query(all_rooms_query)['data']['rooms']
+arq = temp_1.heroku_query(all_rooms_query)['data']['rooms']
 arq0 = [x for x in arq if x['floor'] == floor_number]
 
 player_loc_x = look_info['x']
@@ -68,6 +69,9 @@ class MyGame(arcade.Window):
         self.x = player_loc_x
         self.y = player_loc_y 
         self.floor = floor_number
+        self.desc = look_info['description']
+        self.itemdesc = look_info['items available']
+        self.mq = my_query()
 
         for row in range(ROW_COUNT):
             # Add an empty array that will hold each cell
@@ -82,17 +86,17 @@ class MyGame(arcade.Window):
     def setup(self):
         
         self.button_list = []
-        north_button = DirTextButton(SCREEN_WIDTH - 100, SCREEN_HEIGHT - 100)
+        north_button = DirTextButton(SCREEN_WIDTH - 100, SCREEN_HEIGHT - 100, action_function = self.mq.move_n, text = "North")
         self.button_list.append(north_button)
-        south_button = DirTextButton(SCREEN_WIDTH - 100, SCREEN_HEIGHT - 150,action_function = move_s, text = "South")
+        south_button = DirTextButton(SCREEN_WIDTH - 100, SCREEN_HEIGHT - 150,action_function = self.mq.move_s, text = "South")
         self.button_list.append(south_button)
-        west_button = DirTextButton(SCREEN_WIDTH - 100, SCREEN_HEIGHT - 200,action_function = move_w, text = "West")
+        west_button = DirTextButton(SCREEN_WIDTH - 100, SCREEN_HEIGHT - 200,action_function = self.mq.move_w, text = "West")
         self.button_list.append(west_button)
-        east_button = DirTextButton(SCREEN_WIDTH - 100, SCREEN_HEIGHT - 250,action_function = move_e, text = "East")
+        east_button = DirTextButton(SCREEN_WIDTH - 100, SCREEN_HEIGHT - 250,action_function = self.mq.move_e, text = "East")
         self.button_list.append(east_button)
-        up_button = DirTextButton(SCREEN_WIDTH - 100, SCREEN_HEIGHT - 300,action_function = move_u, text = "Up")
+        up_button = DirTextButton(SCREEN_WIDTH - 100, SCREEN_HEIGHT - 300,action_function = self.mq.move_u, text = "Up")
         self.button_list.append(up_button)
-        down_button = DirTextButton(SCREEN_WIDTH - 100, SCREEN_HEIGHT - 350,action_function = move_d, text = "Down")
+        down_button = DirTextButton(SCREEN_WIDTH - 100, SCREEN_HEIGHT - 350,action_function = self.mq.move_d, text = "Down")
         self.button_list.append(down_button)
 
     def on_draw(self):
@@ -156,7 +160,7 @@ class MyGame(arcade.Window):
         Called when a user releases a mouse button.
         """
         check_mouse_release_for_buttons(x, y, self.button_list)
-        new_look = look()
+        new_look = self.mq.look()
         self.x = new_look['x']
         self.y = new_look['y']
         self.floor = new_look['floor']

@@ -103,13 +103,14 @@ def check_mouse_release_for_buttons(_x, _y, button_list):
 
 
 class DirTextButton(TextButton):
-    def __init__(self, center_x, center_y, action_function = move_n,text = "North"):
+    def __init__(self, center_x, center_y, action_function ,text = "North"):
         super().__init__(center_x, center_y, 100, 40, text, 18, "Arial")
         self.action_function = action_function
 
     def on_release(self):
         super().on_release()
         self.action_function()
+        
 
 
 
