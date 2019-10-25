@@ -68,7 +68,7 @@ class MyGame(arcade.Window):
             self.itemdesc = text_pretty(self.look_info['items available'])
             #print(self.itemdesc)
         else:
-            self.itemdesc = ''
+            self.itemdesc = ' '
 
         for row in range(ROW_COUNT):
             # Add an empty array that will hold each cell
@@ -96,6 +96,8 @@ class MyGame(arcade.Window):
         self.button_list.append(up_button)
         down_button = DirTextButton(SCREEN_WIDTH - x_adj, SCREEN_HEIGHT - adj -6*50,action_function = self.mq.move_d, text = "Down")
         self.button_list.append(down_button)
+
+        #other buttons
 
     def on_draw(self):
         """
@@ -174,10 +176,10 @@ class MyGame(arcade.Window):
         self.y = new_look['y']
         self.floor = new_look['floor']
         self.desc = text_pretty(new_look['description'])
-        if self.look_info['items available']:
-            self.itemdesc = text_pretty(self.look_info['items available'])
+        if new_look['items available'] is not None:
+            self.itemdesc = text_pretty(new_look['items available'])
         else:
-            self.itemdesc = ''
+            self.itemdesc = ' '
         self.arq_flr = [x for x in self.arq if x['floor'] == self.floor]
                 
 
