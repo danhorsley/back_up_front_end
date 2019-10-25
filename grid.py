@@ -5,22 +5,6 @@ from buttons import *
 def text_pretty(some_text, n=50):
     return ' \n '.join([some_text[i:i+n] for i in range(0, len(some_text), n)])
 
-
-temp_1 = my_query()
-#auth_key = login()
-look_info = temp_1.look()
-floor_number = look_info['floor']
-#floor_number = input('please input floor number : ')
-#floor_number = int(floor_number)
-arq = temp_1.heroku_query(all_rooms_query)['data']['rooms']
-arq0 = [x for x in arq if x['floor'] == floor_number]
-
-player_loc_x = look_info['x']
-player_loc_y = look_info['y']
-#print(player_loc_x, player_loc_y)
-#print(arq0[0])
-
-
 ROW_COUNT = 8
 COLUMN_COUNT = 10
 
@@ -69,12 +53,22 @@ class MyGame(arcade.Window):
         # Create a 2 dimensional array. A two dimensional
         # array is simply a list of lists.
         self.grid = []
-        self.x = player_loc_x
-        self.y = player_loc_y 
-        self.floor = floor_number
-        self.desc = text_pretty(look_info['description'])
-        self.itemdesc = look_info['items available']
+        
         self.mq = my_query()
+        self.arq = self.mq.heroku_query(all_rooms_query)['data']['rooms']
+        
+        self.look_info = self.mq.look()
+        self.x = self.look_info['x']
+        self.y = self.look_info['y']
+        self.floor = self.look_info['floor']
+        self.arq_flr = [x for x in self.arq if x['floor'] == self.floor]
+        #print(self.arq_flr)
+        self.desc = text_pretty(self.look_info['description'])
+        if self.look_info['items available'] is not None:
+            self.itemdesc = text_pretty(self.look_info['items available'])
+            #print(self.itemdesc)
+        else:
+            self.itemdesc = ''
 
         for row in range(ROW_COUNT):
             # Add an empty array that will hold each cell
@@ -127,7 +121,8 @@ class MyGame(arcade.Window):
                 
                 
                 #matching to grid
-                room_ref = [c for c in arq0 if c['x'] == column and c['y'] == row][0]
+                #room_ref = [c for c in arq0 if c['x'] == column and c['y'] == row][0]
+                room_ref = [c for c in self.arq_flr if c['x'] == column and c['y'] == row][0]
                 
 
                 # Draw the box
@@ -149,12 +144,18 @@ class MyGame(arcade.Window):
             
         arcade.draw_rectangle_filled( (MARGIN + WIDTH) * self.x + MARGIN + WIDTH // 2, 
                                 (MARGIN + HEIGHT) * self.y + MARGIN + HEIGHT // 2 , 10, 10, arcade.color.WHITE)  
-
+        #draw the buttons
         for button in self.button_list:
             button.draw()
 
+        #draw the text boxes
         arcade.draw_text(
             self.desc, SCREEN_WIDTH -240, SCREEN_HEIGHT -350, 
+            arcade.color.WHITE, 12, align="center", anchor_x="center", anchor_y="center")
+        
+        
+        arcade.draw_text(
+            self.itemdesc, SCREEN_WIDTH -240, SCREEN_HEIGHT -400, 
             arcade.color.WHITE, 12, align="center", anchor_x="center", anchor_y="center")
 
     def on_mouse_press(self, x, y, button, key_modifiers):
@@ -173,6 +174,11 @@ class MyGame(arcade.Window):
         self.y = new_look['y']
         self.floor = new_look['floor']
         self.desc = text_pretty(new_look['description'])
+        if self.look_info['items available']:
+            self.itemdesc = text_pretty(self.look_info['items available'])
+        else:
+            self.itemdesc = ''
+        self.arq_flr = [x for x in self.arq if x['floor'] == self.floor]
                 
 
     # def on_mouse_press(self, x, y, button, modifiers):
