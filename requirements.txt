@@ -17,6 +17,6 @@ PySocks==1.7.1
 pytiled-parser==0.9.0
 requests==2.22.0
 six==1.12.0
-urllib3==1.24.2
+urllib3==1.26.5
 win-inet-pton==1.1.0
 wincertstore==0.2
