@@ -8,7 +8,7 @@ cryptography==2.7
 future==0.18.1
 idna==2.8
 numpy==1.17.3
-Pillow==6.2.1
+Pillow==8.2.0
 pycparser==2.19
 pyglet==1.4.6
 pyglet-ffmpeg2==0.1.15
